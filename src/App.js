@@ -166,6 +166,7 @@ const App = () => {
 							const nextStatuses = {...orderStatuses};
 
 							nextStatuses[itemId] = 'DONE';
+							console.log(nextStatuses);
 
 							setOrderStatuses(nextStatuses);
 							localStorage.setItem('orderStatuses', JSON.stringify(nextStatuses));
@@ -174,6 +175,16 @@ const App = () => {
 							const nextStatuses = {...orderStatuses};
 
 							nextStatuses[itemId] = 'ACTIVE';
+							console.log(nextStatuses);
+
+							setOrderStatuses(nextStatuses);
+							localStorage.setItem('orderStatuses', JSON.stringify(nextStatuses));
+						}}
+						setCancelOrder={({ itemId }) => {
+							const nextStatuses = {...orderStatuses};
+
+							nextStatuses[itemId] = 'CANCELED';
+							console.log(nextStatuses);
 
 							setOrderStatuses(nextStatuses);
 							localStorage.setItem('orderStatuses', JSON.stringify(nextStatuses));
