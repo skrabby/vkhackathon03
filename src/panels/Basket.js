@@ -147,9 +147,11 @@ const Basket = ({ match: { params: { areaId, itemId }}, foodAreas, order }) => {
         </div>
       </div>
       <footer className="Place__footer">
-        <Link to={`/order/${area.id}/${item.id}`} className="Place__order">
+        <button onClick={() => {
+          window.location.href = `/order/${area.id}/${item.id}`
+        }} className="Place__order" disabled={price < 1}>
           Оплатить {price}
-        </Link>
+        </button>
       </footer>
     </div>
   );

@@ -10,16 +10,13 @@ import './place.css';
 const Place = ({ item, order, onIncrementPosition, onDecrementPosition, area }) => {
   const price = useMemo(() => {
     const foodIds = new Set((item.foods || []).map(item => item.id));
-
     const result = Object.values(order)
       .filter((value) => {
         const { item: { id }} = value;
-
         return foodIds.has(id);
       })
       .reduce((result, value) => {
         const { count, item: { price }} = value;
-
         return result + parseInt(price) * parseInt(count);
       }, 0);
 
