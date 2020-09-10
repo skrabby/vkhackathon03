@@ -127,6 +127,7 @@ const foodsMap = FOOD_AREAS.reduce((result, area) => {
 const App = () => {
 	const [ orderStatuses, setOrderStatuses ] = useState(JSON.parse((localStorage.getItem('orderStatuses') || 'null')) || {});
 	const [ order, setOrder ] = useState(JSON.parse((localStorage.getItem('orders') || 'null')) || {});
+	const [checkedValues, setCheckedValues] = useState({faster: true, time: "", selfService: false,});
 
 	return (
 		<Router>
@@ -150,6 +151,8 @@ const App = () => {
 				</Route>
 				<Route path="/basket/:areaId/:itemId" exact>
 					<Basket
+						checkedValues={checkedValues}
+						setCheckedValues={setCheckedValues}
 						foodAreas={FOOD_AREAS}
 						order={order}
 					/>
@@ -166,8 +169,13 @@ const App = () => {
 							const nextStatuses = {...orderStatuses};
 
 							nextStatuses[itemId] = 'DONE';
-							console.log(nextStatuses);
+							setOrderStatuses(nextStatuses);
+							localStorage.setItem('orderStatuses', JSON.stringify(nextStatuses));
+						}}
+						setCanceledOrder={({ itemId }) => {
+							const nextStatuses = {...orderStatuses};
 
+							nextStatuses[itemId] = 'CANCELED';
 							setOrderStatuses(nextStatuses);
 							localStorage.setItem('orderStatuses', JSON.stringify(nextStatuses));
 						}}
@@ -175,17 +183,6 @@ const App = () => {
 							const nextStatuses = {...orderStatuses};
 
 							nextStatuses[itemId] = 'ACTIVE';
-							console.log(nextStatuses);
-
-							setOrderStatuses(nextStatuses);
-							localStorage.setItem('orderStatuses', JSON.stringify(nextStatuses));
-						}}
-						setCancelOrder={({ itemId }) => {
-							const nextStatuses = {...orderStatuses};
-
-							nextStatuses[itemId] = 'CANCELED';
-							console.log(nextStatuses);
-
 							setOrderStatuses(nextStatuses);
 							localStorage.setItem('orderStatuses', JSON.stringify(nextStatuses));
 						}}

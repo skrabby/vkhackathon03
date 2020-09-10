@@ -8,12 +8,16 @@ import edit from '../img/edit.svg';
 import './place.css';
 
 
-const Basket = ({ match: { params: { areaId, itemId }}, foodAreas, order }) => {
-  const [ faster, setFaster ] = useState(true);
-  const [ time, setTime ] = useState('');
-  const [ selfService, setSelfService ] = useState(false);
-  const area = foodAreas.filter(area => area.id === areaId)[0];
-  const item = area.items.filter(item => item.id === itemId)[0];
+const Basket = ({ match: { params: { areaId, itemId }}, foodAreas, order, checkedValues, setCheckedValues }) => {
+    const { faster, time, selfService } = checkedValues;
+    const setCheckedValuesWith = (values) =>
+        setCheckedValues({ ...checkedValues, ...values });
+    const setFaster = (f) => setCheckedValuesWith({ faster: f });
+    const setTime = (t) => setCheckedValuesWith({ time: t });
+    const setSelfService = (s) => setCheckedValuesWith({ selfService: s });
+
+    const area = foodAreas.filter(area => area.id === areaId)[0];
+    const item = area.items.filter(item => item.id === itemId)[0];
 
   const [ price, products ] = useMemo(() => {
     const foodIds = new Set((item.foods || []).map(item => item.id));
@@ -107,8 +111,8 @@ const Basket = ({ match: { params: { areaId, itemId }}, foodAreas, order }) => {
         <h3>Время:</h3>
         <div className="Place__choice-item">
           <span>Как можно быстрее</span>
-          <Checkbox 
-            checked={faster} 
+          <Checkbox
+            checked={faster}
             onToggle={() => {
               if (faster) {
                 setFaster(false);
@@ -122,8 +126,8 @@ const Basket = ({ match: { params: { areaId, itemId }}, foodAreas, order }) => {
         <div className="Place__choice-item">
           <span>Назначить</span>
           <input
-	    type="time"
             value={time}
+			type="time"
             onFocus={() => {
               setFaster(false);
             }}
@@ -148,11 +152,9 @@ const Basket = ({ match: { params: { areaId, itemId }}, foodAreas, order }) => {
         </div>
       </div>
       <footer className="Place__footer">
-        <button onClick={() => {
-          window.location.href = `/order/${area.id}/${item.id}`
-        }} className="Place__order" disabled={price < 1}>
+        <Link to={`/order/${area.id}/${item.id}`} className="Place__order">
           Оплатить {price}
-        </button>
+        </Link>
       </footer>
     </div>
   );
